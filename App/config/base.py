@@ -4,6 +4,8 @@ Base configuration class
 import os
 from typing import Optional
 
+from flask.cli import load_dotenv
+load_dotenv()  # ✅ load here safely
 
 class BaseConfig:
     """Base configuration with common settings"""
