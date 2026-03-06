@@ -5,7 +5,7 @@ from flask import Flask, jsonify
 
 from App.config import get_config
 from App.observability.logger import setup_logger
-from App.api.v1 import register_v1_blueprints
+from App.api.v1.routes import register_v1_blueprints
 
 def create_app(config_class=None) -> Flask:
     app = Flask(__name__)

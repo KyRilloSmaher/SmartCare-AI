@@ -12,12 +12,12 @@ def get_repo() -> VectorRepository :
     """
     vector_type = BaseConfig.VECTOR_DB_TYPE.lower()
     if vector_type == "faiss":
-            repo = FAISSRepository()
+            repo = FAISSRepository(384)
             repo.initialize()
             logger.info("Using FAISS for vector search")
             return repo
     elif vector_type == "qdrant":
-            repo = QdrantRepository()
+            repo = QdrantRepository(384)
             repo.initialize()
             logger.info("Using Qdrant for vector search")
             return repo

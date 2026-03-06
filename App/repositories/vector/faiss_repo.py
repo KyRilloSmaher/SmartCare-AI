@@ -14,13 +14,13 @@ logger = get_logger(__name__)
 class FAISSRepository(VectorRepository):
     """FAISS vector store with Qdrant-like behavior"""
 
-    def __init__(self):
+    def __init__(self, vectorSize:int):
         self.index_dir = BaseConfig.FAISS_INDEX_PATH
         self.index_file = os.path.join(self.index_dir, "index.faiss")
         self.meta_file = os.path.join(self.index_dir, "meta.pkl")
         self.vec_file = os.path.join(self.index_dir, "vectors.pkl")
 
-        self.dim = 1536  # must match embedding model
+        self.dim = vectorSize  # must match embedding model
 
         self.index: Optional[faiss.IndexIDMap] = None
         self.metadata: Dict[str, Dict[str, Any]] = {}

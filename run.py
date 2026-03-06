@@ -25,7 +25,7 @@ if __name__ == "__main__":
     test_similar.test_find_similar_by_id("00230eb5-aed2-490a-9642-7cba938790c8")
 
     test_semantic = TestSemanticSearch()
-    test_semantic.test_search("medicine for headache and fever")
+    test_semantic.test_search("Sexual")
     port = int(os.getenv("PORT", 5000))
     debug = os.getenv("DEBUG", "false").lower() == "false"
 
