@@ -28,7 +28,7 @@ greenlet==3.3.0
 # ===============================
 # Vector Databases
 # ===============================
-# faiss-cpu==1.8.0
+faiss-cpu==1.8.0
 qdrant-client==1.7.0
 portalocker==2.10.1
 
