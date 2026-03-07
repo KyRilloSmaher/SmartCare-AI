@@ -10,7 +10,8 @@ from qdrant_client.models import (
 from App.repositories.vector.base import VectorRepository
 from App.config.base import BaseConfig
 from App.observability.logger import get_logger
-
+from qdrant_client.http.exceptions import UnexpectedResponse
+from qdrant_client.models import VectorParams, Distance
 logger = get_logger(__name__)
 
 
@@ -52,6 +53,7 @@ class QdrantRepository(VectorRepository):
     # Initialization
     # ---------------------------------------------------
 
+
     def initialize(self) -> None:
         """Ensure collection exists with correct vector size"""
         try:
@@ -60,7 +62,6 @@ class QdrantRepository(VectorRepository):
 
                 # Extract vector size
                 vectors_config = info.config.params.vectors
-
                 if hasattr(vectors_config, "size"):
                     existing_size = vectors_config.size
                 elif isinstance(vectors_config, dict):
@@ -79,6 +80,13 @@ class QdrantRepository(VectorRepository):
                 else:
                     logger.info("Collection already exists with correct schema")
 
+            except UnexpectedResponse as e:
+                if "already exists" in str(e):
+                    logger.info("Collection already exists, skipping creation")
+                else:
+                    logger.info("Collection not found. Creating new one...")
+                    self._create_collection()
+
             except Exception:
                 logger.info("Collection not found. Creating new one...")
                 self._create_collection()
@@ -88,20 +96,26 @@ class QdrantRepository(VectorRepository):
             raise
 
     def _create_collection(self):
-        self.client.create_collection(
-            collection_name=self.collection,
-            vectors_config={
-                self.VECTOR_NAME: VectorParams(
-                    size=self.vector_size,
-                    distance=Distance.COSINE
-                )
-            }
-        )
+        try:
+            self.client.create_collection(
+                collection_name=self.collection,
+                vectors_config={
+                    self.VECTOR_NAME: VectorParams(
+                        size=self.vector_size,
+                        distance=Distance.COSINE
+                    )
+                }
+            )
+            logger.info(
+                f"Collection '{self.collection}' created with vector size {self.vector_size}"
+            )
+        except UnexpectedResponse as e:
+            if "already exists" in str(e):
+                logger.info(f"Collection '{self.collection}' already exists, skipping creation")
+            else:
+                logger.error("Failed to create collection", exc_info=True)
+                raise
 
-        logger.info(
-            f"Collection '{self.collection}' created "
-            f"with vector size {self.vector_size}"
-        )
 
     # ---------------------------------------------------
     # Add Vectors
