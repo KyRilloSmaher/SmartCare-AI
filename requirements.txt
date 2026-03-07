@@ -28,7 +28,7 @@ greenlet==3.3.0
 # ===============================
 # Vector Databases
 # ===============================
-# faiss-cpu==1.8.0
+faiss-cpu==1.8.0
 qdrant-client==1.7.0
 portalocker==2.10.1
 
@@ -41,13 +41,14 @@ transformers==4.57.6
 huggingface-hub==0.36.0
 tokenizers==0.22.2
 safetensors==0.7.0
-scikit-learn==1.8.0
+scikit-learn==1.4.2
 scipy==1.17.0
 numpy==1.26.4
 regex==2026.1.15
 joblib==1.5.3
 threadpoolctl==3.6.0
 torch==2.10.0
+langdetect==1.0.9
 # ===============================
 # Data Processing & Visualization
 # ===============================
