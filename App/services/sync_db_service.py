@@ -9,7 +9,7 @@ logger = get_logger(__name__)
 
 class SyncService:
     SYNC_NAME = "products"
-    BATCH_SIZE = 10  # Can increase to 50+ if needed
+    BATCH_SIZE = 100  # Can increase to 50+ if needed
 
     def __init__(self):
         self.product_repo = ProductRepository()

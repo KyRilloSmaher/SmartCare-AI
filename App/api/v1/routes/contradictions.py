@@ -68,7 +68,7 @@ def check_contradictions():
     """
     logger.info("Contradiction check requested")
 
-    if not FeatureFlags.is_enabled("contradictions"):
+    if not FeatureFlags.is_enabled("contraindications"):
         logger.warning("Contradictions feature is disabled")
         return jsonify({
             "error": "Feature disabled",
