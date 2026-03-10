@@ -16,7 +16,7 @@ app = create_app()
 
 if __name__ == "__main__":
     # 🔥 START BACKGROUND JOBS ONCE
-    # start_vector_sync_scheduler()
+    start_vector_sync_scheduler()
         # Optional manual tests
     from App.tests.test_similars_drugs import TestSimilarDrugs
     from App.tests.test_semantic_search import TestSemanticSearch
