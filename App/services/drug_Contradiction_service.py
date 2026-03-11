@@ -2,7 +2,7 @@
 from typing import List, Dict, Any
 from App.repositories.vector.repository_factory import get_repo
 from App.observability.logger import get_logger
-
+import numpy as np
 logger = get_logger(__name__)
 
 class ContradictionService:
@@ -47,6 +47,7 @@ class ContradictionService:
 
         for cid in candidate_ids:
 
+
             if exclude_self and cid == product_id:
                 continue
 
@@ -54,7 +55,10 @@ class ContradictionService:
             if not candidate_vector:
                 continue
 
-            score = self.vector_repo.similarity(query_vector, candidate_vector)
+            score = float(
+                np.dot(query_vector, candidate_vector) /
+                (np.linalg.norm(query_vector) * np.linalg.norm(candidate_vector))
+            )
 
             if score <= contradiction_threshold:
                 contradictions.append({
