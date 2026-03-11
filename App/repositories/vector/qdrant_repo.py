@@ -233,3 +233,4 @@ class QdrantRepository(VectorRepository):
         except Exception:
             logger.error("Qdrant retrieve failed", exc_info=True)
             return None
+    
