@@ -2,7 +2,7 @@
 from typing import List, Dict, Any
 from App.repositories.vector.repository_factory import get_repo
 from App.observability.logger import get_logger
-import numpy as np
+import numpy as npimport numpy as np
 logger = get_logger(__name__)
 
 class ContradictionService:
