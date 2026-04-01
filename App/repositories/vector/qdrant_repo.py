@@ -233,4 +233,36 @@ class QdrantRepository(VectorRepository):
         except Exception:
             logger.error("Qdrant retrieve failed", exc_info=True)
             return None
+    def get_product_text(self, product_id: str) -> str:
+        """
+        Retrieve product text from Qdrant payload
+        """
+
+        try:
+            result = self.client.retrieve(
+                collection_name=self.collection,
+                ids=[product_id],
+                with_payload=True
+            )
+
+            if not result:
+                return ""
+
+            payload = result[0].payload or {}
+
+            text_parts = [
+                str(payload.get("name", "")),
+                str(payload.get("description", "")),
+                str(payload.get("summary", "")),
+                str(payload.get("tags", ""))
+            ]
+
+            return " ".join(text_parts)
+
+        except Exception as e:
+            logger.error(
+                f"Failed to retrieve product text for {product_id}: {str(e)}",
+                exc_info=True
+            )
+            return ""
     

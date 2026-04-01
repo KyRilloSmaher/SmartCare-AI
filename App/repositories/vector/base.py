@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
-
+import numpy as np
 class VectorRepository(ABC):
     """Abstract interface for vector database operations"""
 
@@ -31,3 +31,24 @@ class VectorRepository(ABC):
     def initialize(cls) -> "VectorRepository":
         """Return initialized vector repository instance"""
         pass
+
+    @classmethod
+    @abstractmethod
+    def get_product_text(self, product_id: str) -> str:
+        """
+        Retrieve product text from Qdrant payload
+        """
+        pass
+    @classmethod
+    def similarity(self, v1, v2):
+
+        v1 = np.array(v1)
+        v2 = np.array(v2)
+
+        norm1 = np.linalg.norm(v1)
+        norm2 = np.linalg.norm(v2)
+
+        if norm1 == 0 or norm2 == 0:
+            return 0
+
+        return float(np.dot(v1, v2) / (norm1 * norm2))

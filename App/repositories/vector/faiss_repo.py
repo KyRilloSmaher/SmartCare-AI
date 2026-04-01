@@ -172,3 +172,8 @@ class FAISSRepository(VectorRepository):
         self.index.remove_ids(faiss_ids)
         self._persist()
         return True
+    def get_product_text(self, product_id: str) -> str:
+        """
+        Retrieve product text from Qdrant payload
+        """
+        logger.warning("FAISS GET PRODUCT TEXT METHOD NOT IMPLMENETD YET")
