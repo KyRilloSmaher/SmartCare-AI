@@ -1,5 +1,5 @@
 from App.observability.logger import get_logger
-from App.services.drug_similars_service import SimilarityService
+from App.services.SimilarityService.drug_similars_service import SimilarityService
 logger = get_logger(__name__)
 class TestSimilarDrugs:
     def test_find_similar_by_id(self , product_id:str):

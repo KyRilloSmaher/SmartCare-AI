@@ -1,13 +1,13 @@
-# App/services/similarity_service.py
+# App/services/SimilarityService/drug_similarity_service.py
 from typing import List, Dict, Any, Optional
-from App.services.embedding_service import EmbeddingService
+from App.services.SimilarityService.ISimilarityService import ISimilarityService 
 from App.repositories.vector.repository_factory import get_repo
 from App.observability.logger import get_logger
 import numpy as np
 
 logger = get_logger(__name__)
 
-class SimilarityService:
+class SimilarityService(ISimilarityService):
     def __init__(self):
         self.vector_repo = get_repo()
         logger.info("SimilarityService initialized")

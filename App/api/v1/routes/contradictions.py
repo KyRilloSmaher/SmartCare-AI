@@ -7,7 +7,7 @@ from typing import List
 from flask import Blueprint, jsonify, request
 from pydantic import BaseModel, Field, ValidationError as PydanticValidationError
 
-from App.services.interfaces import IContradictionService
+from App.services.ContradictionService.IContradictionService import IContradictionService
 from App.services import get_contradiction_service
 from App.config.feature_flags import FeatureFlags
 from App.observability.logger import get_logger

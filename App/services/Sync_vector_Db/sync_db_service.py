@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from App.repositories.mssql.product_repo import ProductRepository
 from App.repositories.mssql.sync_state_repo import VectorSyncStateRepository
 from App.observability.logger import get_logger
-from App.services.embedding_service import EmbeddingService
+from App.services.EmbeddingService.embedding_service import EmbeddingService
 from App.repositories.vector.repository_factory import get_repo
 
 logger = get_logger(__name__)

@@ -7,7 +7,7 @@ from typing import List, Optional
 from flask import Blueprint, jsonify, request
 from pydantic import BaseModel, Field, ValidationError as PydanticValidationError
 
-from App.services.interfaces import ISimilarityService
+from App.services.SimilarityService.ISimilarityService import ISimilarityService
 from App.services.service_providers import get_similarity_service
 from App.observability.logger import get_logger
 from App.utils.exceptions import ValidationError

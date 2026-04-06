@@ -1,14 +1,14 @@
 from typing import List, Dict, Any, Optional
-from App.services.embedding_service import EmbeddingService
+from App.services.EmbeddingService.embedding_service import EmbeddingService
 from App.repositories.vector.repository_factory import get_repo
 from App.ML.preprocessing.text_cleaner import Cleaner
 from App.ML.preprocessing.language_detector import LanguageDetector
 from App.observability.logger import get_logger
-
+from App.services.SemanticSearchService.ISemanticSearchService import ISemanticSearchService
 logger = get_logger(__name__)
 
 
-class SemanticSearchService:
+class SemanticSearchService(ISemanticSearchService):
     def __init__(self):
         self.embedding_service = EmbeddingService()
         self.vector_repo = get_repo()

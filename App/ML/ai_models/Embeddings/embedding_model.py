@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModel
-from App.ML.models.BaseEmbeddingModel import BaseEmbeddingModel
+from App.ML.ai_models.Embeddings.BaseEmbeddingModel import BaseEmbeddingModel
 from App.observability.logger import get_logger
 
 logger = get_logger(__name__)

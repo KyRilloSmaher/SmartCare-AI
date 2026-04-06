@@ -1,5 +1,5 @@
 
-from App.ML.models.embedding_factory import get_embedding_model
+from App.ML.ai_models.Embeddings.embedding_factory import get_embedding_model
 from typing import List
 from App.observability.logger import get_logger
 

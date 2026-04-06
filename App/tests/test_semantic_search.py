@@ -1,5 +1,5 @@
 from App.observability.logger import get_logger
-from App.services.semantic_search_service import SemanticSearchService
+from App.services.SemanticSearchService.semantic_search_service import SemanticSearchService
 logger = get_logger(__name__)
 class TestSemanticSearch:
     def test_search(self ,Query:str):

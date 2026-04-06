@@ -2,9 +2,11 @@
 from flask import Blueprint
 
 from App.api.v1.routes import health, sync
-from App.api.v1.routes import contradictions  # Import the module, not the function
-from App.api.v1.routes import similarity      # Import the module, not the function
-
+from App.api.v1.routes import contradictions  
+from App.api.v1.routes import similarity      
+from . import voice_search
+from . import chat
+from . import drug_extraction
 
 def register_v1_blueprints(app):
     """
@@ -21,6 +23,8 @@ def register_v1_blueprints(app):
     v1_bp.register_blueprint(contradictions.bp_contradictions)  # Use the correct blueprint name
     v1_bp.register_blueprint(similarity.bp_similarity)          # Use the correct blueprint name
     v1_bp.register_blueprint(sync.bp)
-
+    v1_bp.register_blueprint(voice_search.bp)
+    v1_bp.register_blueprint(chat.bp)
+    v1_bp.register_blueprint(drug_extraction.bp)
     # Register v1 blueprint with app
     app.register_blueprint(v1_bp)

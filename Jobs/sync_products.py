@@ -6,7 +6,7 @@ Sync products from MSSQL into Vector DB As Background Job
 
 # App/jobs/vector_sync_scheduler.py
 from apscheduler.schedulers.background import BackgroundScheduler
-from App.services.sync_db_service import SyncService
+from App.services.Sync_vector_Db.sync_db_service import SyncService
 from App.observability.logger import get_logger
 import atexit
 

@@ -45,4 +45,14 @@ class BaseConfig:
     # API
     API_V1_PREFIX: str = '/api/v1'
     
+    OCR_API_KEY = os.getenv("OCR_API_KEY")
+    OCR_SPACE_URL = "https://api.ocr.space/parse/image"
+    
+    OPENROUTER_API_KEY =  os.getenv("OPENROUTER_API_KEY")
+    OPENROUTER_BASE_URL =  "https://openrouter.ai/api/v1"
+
+    YOLO_WEIGHTS = "best (1).pt"
+    WHISPER_MODEL = "tiny"
+    DEVICE = "cpu" 
+    
 

@@ -3,11 +3,12 @@
 from typing import List, Dict, Any
 from App.repositories.vector.repository_factory import get_repo
 from App.observability.logger import get_logger
+from App.services.ContradictionService.IContradictionService import IContradictionService
 
 logger = get_logger(__name__)
 
 
-class ContradictionService:
+class ContradictionService(IContradictionService):
 
     def __init__(self):
         self.vector_repo = get_repo()
