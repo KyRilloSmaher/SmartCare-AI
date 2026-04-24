@@ -7,6 +7,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     build-essential gcc g++ \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment
@@ -20,6 +21,9 @@ RUN pip install --upgrade pip
 # install torch CPU
 RUN pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
 
+# Install opencv-headless first to prevent ultralytics from installing full opencv
+RUN pip install opencv-python-headless==4.9.0.80
+
 # install remaining deps
 RUN pip install -r requirements-prod.txt
 
@@ -28,9 +32,15 @@ RUN pip install -r requirements-prod.txt
 # -------------------------------
 FROM python:3.11-slim
 
+# Install runtime system dependencies for OpenCV headless
+RUN apt-get update && apt-get install -y \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV TRANSFORMERS_CACHE=/tmp/hf_cache
+ENV OPENCV_OPENCL_RUNTIME=
 
 WORKDIR /app
 
@@ -41,6 +51,6 @@ ENV PATH="/opt/venv/bin:$PATH"
 # copy app
 COPY . .
 
-EXPOSE 8080
+EXPOSE 5000
 
 CMD ["python", "run.py"]
