@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY requirements-prod.txt .
+COPY requirements.txt .
 
 RUN pip install --upgrade pip
 
