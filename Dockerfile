@@ -17,8 +17,7 @@ COPY requirements-prod.txt .
 RUN pip install --upgrade pip
 
 # Install torch CPU with compatible versions
-RUN pip install torch==2.11.0 torchvision==0.24.0 --index-url https://download.pytorch.org/whl/cpu
-
+RUN pip install torch==2.11.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cpu
 # Install OpenCV headless first to avoid standard OpenCV dependencies
 RUN pip install opencv-python-headless==4.9.0.80
 
