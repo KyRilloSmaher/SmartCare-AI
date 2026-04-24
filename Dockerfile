@@ -58,6 +58,10 @@ WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
+# REINSTALL PyTorch in final stage (to ensure it's there)
+RUN pip install torch==2.11.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cpu
+RUN python -c "import torch; print(f'✅ PyTorch {torch.__version__} reinstalled')"
+
 # Copy application code
 COPY . .
 
