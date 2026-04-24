@@ -59,3 +59,4 @@ numpy==1.26.4
 pandas==2.3.3
 openai==2.15.0
 faster-whisper==1.0.3
+ultralytics==8.3.0
