@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY requirements.txt .
+COPY requirements-prod.txt .
 
 RUN pip install --upgrade pip
 
@@ -21,7 +21,7 @@ RUN pip install --upgrade pip
 RUN pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
 
 # install remaining deps
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-prod.txt
 
 # -------------------------------
 # Final image
