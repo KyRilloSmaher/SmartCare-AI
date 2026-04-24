@@ -16,8 +16,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements-prod.txt .
 RUN pip install --upgrade pip
 
-# Install torch CPU (Updated to 2.11.0 for March 2026 compatibility)
-RUN pip install torch==2.11.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cpu
+# Install torch CPU with compatible versions
+RUN pip install torch==2.11.0 torchvision==0.24.0 --index-url https://download.pytorch.org/whl/cpu
 
 # Install OpenCV headless first to avoid standard OpenCV dependencies
 RUN pip install opencv-python-headless==4.9.0.80
