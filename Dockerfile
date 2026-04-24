@@ -17,7 +17,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --upgrade pip
 
 # Install PyTorch FIRST (before copying requirements)
-RUN pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cpu
+# Updated to 2.4.0 to meet transformers library requirements
+RUN pip install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cpu
 
 # Copy and install requirements
 COPY requirements-prod.txt .
@@ -59,7 +60,8 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # REINSTALL PyTorch in final stage (to ensure it's there)
-RUN pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cpu
+# Updated to 2.4.0 to meet transformers library requirements
+RUN pip install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cpu
 RUN python -c "import torch; print(f'✅ PyTorch {torch.__version__} reinstalled')"
 
 # Copy application code
