@@ -12,6 +12,7 @@ ultralytics==8.4.41
 pandas==3.0.2
 Pillow==12.2.0
 pydantic==2.13.3
+pyodbc==5.2.0
 python-dotenv==1.2.2
 qdrant_client==1.17.1
 Requests==2.33.1
