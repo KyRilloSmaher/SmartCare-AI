@@ -46,10 +46,6 @@ safetensors==0.7.0
 # -------------------------------
 # torch installed in Dockerfile (CPU version)
 
-# -------------------------------
-# Search / similarity
-# -------------------------------
-faiss-cpu==1.8.0
 
 # -------------------------------
 # Utilities
