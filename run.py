@@ -4,8 +4,8 @@ Application entry point for SmartCare-AI
 import os
 from dotenv import load_dotenv
 
-from App.tests.test_semantic_search import TestSemanticSearch
-from App.tests.test_similars_drugs import TestSimilarDrugs
+# from App.tests.test_semantic_search import TestSemanticSearch
+# from App.tests.test_similars_drugs import TestSimilarDrugs
 
 load_dotenv()
 
