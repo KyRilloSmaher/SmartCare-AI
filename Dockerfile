@@ -1,51 +1,37 @@
 # -------------------------------
-# Base image
+# Builder
+# -------------------------------
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    build-essential gcc g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-prod.txt .
+
+RUN pip install --upgrade pip
+
+# install torch CPU separately
+RUN pip install torch==2.10.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+
+RUN pip install --prefix=/install -r requirements-prod.txt
+
+# -------------------------------
+# Final image
 # -------------------------------
 FROM python:3.11-slim
 
-# -------------------------------
-# Environment settings
-# -------------------------------
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PIP_NO_CACHE_DIR=1
+ENV TRANSFORMERS_CACHE=/tmp/hf_cache
 
-# -------------------------------
-# System dependencies
-# -------------------------------
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    gcc \
-    g++ \
-    curl \
-    git \
-    unixodbc-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# -------------------------------
-# Work directory
-# -------------------------------
 WORKDIR /app
 
-# -------------------------------
-# Install Python dependencies
-# -------------------------------
-COPY requirements.txt .
-
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
-
-# -------------------------------
-# Copy project
-# -------------------------------
+COPY --from=builder /install /usr/local
 COPY . .
 
-# -------------------------------
-# Port (Fly/Railway detect it)
-# -------------------------------
 EXPOSE 8080
 
-# -------------------------------
-# Run API
-# -------------------------------
 CMD ["python", "run.py"]

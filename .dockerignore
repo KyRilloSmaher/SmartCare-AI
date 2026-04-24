@@ -10,3 +10,15 @@ __pycache__
 README.md
 Dockerfile
 .dockerignore
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+node_modules/
+*.log
+tests/
+docs/
