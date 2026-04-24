@@ -14,8 +14,7 @@ COPY requirements-prod.txt .
 RUN pip install --upgrade pip
 
 # install torch CPU separately
-RUN pip install torch==2.10.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
-
+RUN pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --prefix=/install -r requirements-prod.txt
 
 # -------------------------------
