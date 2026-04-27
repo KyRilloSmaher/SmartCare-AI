@@ -136,7 +136,7 @@ class DrugNameExtractionService:
             response = requests.post(url, files=files, data=data, timeout=30)
 
             result = response.json()
-
+            logger.info(f"RUN OCR | RESULT : {result}") 
             # Extract text safely
             parsed_results = result.get("ParsedResults")
             if not parsed_results:
