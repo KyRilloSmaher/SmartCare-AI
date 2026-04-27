@@ -55,6 +55,7 @@ class DrugNameExtractionService:
             unique_texts = self._remove_duplicates(texts)
 
             logger.info("DrugNameExtraction | Extraction completed")
+            logger.info(f"DrugNameExtraction | Texts : {unique_texts}") 
 
             return {
                 "detections": detections,
