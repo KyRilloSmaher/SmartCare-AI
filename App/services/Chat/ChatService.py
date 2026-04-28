@@ -22,7 +22,7 @@ class ChatService(IChatService):
     # -------------------------
     # Public Method
     # -------------------------
-    def ask(self, ingredients: Optional[List[str]] = None, question: Optional[str] = None, audio_file=None) -> str:
+    def ask(self, ingredients: List[str] = None, question: Optional[str] = None, audio_file=None) -> str:
         try:
             logger.info("ChatService | Request started")
 
