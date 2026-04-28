@@ -22,13 +22,14 @@ class ChatService(IChatService):
     # -------------------------
     # Public Method
     # -------------------------
-    def ask(self, ingredients: List[str] = None, question: str = None, audio_file=None) -> str:
+    def ask(self, ingredients: Optional[List[str]] = None, question: Optional[str] = None, audio_file=None) -> str:
         try:
             logger.info("ChatService | Request started")
 
             ingredients = ingredients or []
             question = (question or "").strip()
             transcript = None
+            
             # ── Handle Audio ─────────────────────
             if audio_file:
                 logger.info("ChatService | Transcribing audio...")
@@ -36,11 +37,20 @@ class ChatService(IChatService):
 
                 if not transcript:
                     raise ValueError("Transcription returned empty text")
-            question = f"{question} {transcript}".strip() if question else transcript
+                
+                # Combine question with transcript
+                if question and transcript:
+                    question = f"{question} {transcript}".strip()
+                elif transcript:
+                    question = transcript
 
             # ── Validation (Aligned with API) ────
             if not question and not ingredients:
                 raise ValueError("Either question or ingredients must be provided")
+            
+            # Fix: Only set default question if question is empty and ingredients exist
+            if not question and ingredients:
+                question = "Just talk about these provided medical ingredients"
 
             # ── Build Prompt ─────────────────────
             prompt = self._build_prompt(ingredients, question)
