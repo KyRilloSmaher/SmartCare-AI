@@ -33,7 +33,8 @@ def get_contradiction_service() -> IContradictionService:
 
 @lru_cache(maxsize=1)
 def get_voice_search_service() -> IVoiceSearchService:
-    return VoiceSearchService()
+    semantic = get_semantic_search_service()
+    return VoiceSearchService(semantic)
 
 @lru_cache(maxsize=1)
 def get_chat_service() -> IChatService:

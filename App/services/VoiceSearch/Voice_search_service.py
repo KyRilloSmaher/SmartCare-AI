@@ -5,22 +5,20 @@ from App.repositories.vector.repository_factory import get_repo
 from App.ML.preprocessing.text_cleaner import Cleaner
 from App.ML.preprocessing.language_detector import LanguageDetector
 from App.observability.logger import get_logger
-from App.services.SemanticSearchService.ISemanticSearchService import ISemanticSearchService
 from App.services.VoiceSearch.IVoiceSearchService import IVoiceSearchService
-from App.services.service_providers import get_semantic_search_service
 
 logger = get_logger(__name__)
 
 
 class VoiceSearchService(IVoiceSearchService):
 
-    def __init__(self):
+    def __init__(self ,semantic_search_service ):
         self.transcription_service = get_transcription_provider()
         self.embedding_service = EmbeddingService()
         self.vector_repo = get_repo()
         self.cleaner = Cleaner()
         self.lang_detector = LanguageDetector()
-
+        self.semantic_search_service = semantic_search_service
         logger.info("VoiceSearchService initialized")
 
     def search(
@@ -46,9 +44,8 @@ class VoiceSearchService(IVoiceSearchService):
             logger.info(f"Transcribed text: {text[:100]}...")
 
             # Search
-            service: ISemanticSearchService = get_semantic_search_service()
 
-            results = service.search(
+            results =self.semantic_search_service.search(
                         query=text,
                         top_k=top_k,
                         with_vectors=with_vectors,
