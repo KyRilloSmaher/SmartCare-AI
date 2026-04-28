@@ -3,10 +3,6 @@ Application entry point for SmartCare-AI
 """
 import os
 from dotenv import load_dotenv
-
-# from App.tests.test_semantic_search import TestSemanticSearch
-# from App.tests.test_similars_drugs import TestSimilarDrugs
-
 load_dotenv()
 
 from App import create_app
@@ -15,9 +11,9 @@ from Jobs.sync_products import start_vector_sync_scheduler
 app = create_app()
 
 if __name__ == "__main__":
-    # 🔥 START BACKGROUND JOBS ONCE
+#START BACKGROUND JOBS ONCE
     start_vector_sync_scheduler()
-        # Optional manual tests
+ # Optional manual tests
     # from App.tests.test_similars_drugs import TestSimilarDrugs
     # from App.tests.test_semantic_search import TestSemanticSearch
 

@@ -1,5 +1,4 @@
 from typing import List, Dict, Any
-from sklearn.metrics.pairwise import cosine_similarity
 from App.services.EmbeddingService.embedding_service import EmbeddingService
 from App.repositories.vector.repository_factory import get_repo
 from App.ML.preprocessing.text_cleaner import Cleaner
@@ -11,7 +10,7 @@ logger = get_logger(__name__)
 
 
 class SemanticSearchService(ISemanticSearchService):
-    def init(self):
+    def __init__(self):
         self.embedding_service = EmbeddingService()
         self.vector_repo = get_repo()
         self.cleaner = Cleaner()
@@ -35,11 +34,12 @@ class SemanticSearchService(ISemanticSearchService):
         if self.ref_vector is None:
             return True 
 
-        similarity = cosine_similarity([query_vector], [self.ref_vector])[0][0]
+        similarity = self._similarity(query_vector,self.ref_vector)
 
         logger.info(f"Medical similarity score: {similarity}")
         return similarity >= 0.60
-
+    def _similarity(self, v1, v2):
+        return self.vector_repo.similarity(v1, v2)
     def search(
         self,
         query: str,
@@ -84,5 +84,6 @@ class SemanticSearchService(ISemanticSearchService):
             top_k=top_k,
             with_vectors=with_vectors
         )
+
 
         return results
