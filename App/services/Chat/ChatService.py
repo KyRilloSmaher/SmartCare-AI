@@ -1,3 +1,5 @@
+from typing import List
+
 from openai import OpenAI
 from App.ML.ai_models.Transcription.transcription_provider_factory import get_transcription_provider
 from App.config import get_config
@@ -20,40 +22,44 @@ class ChatService(IChatService):
     # -------------------------
     # Public Method
     # -------------------------
-    def ask(self, ingredient: str, question: str = None, audio_file=None) -> str:
+    def ask(self, ingredients: List[str] = None, question: str = None, audio_file=None) -> str:
         try:
             logger.info("ChatService | Request started")
 
-            #Handle audio if exists
+            ingredients = ingredients or []
+            question = (question or "").strip()
+
+            # ── Handle Audio ─────────────────────
             if audio_file:
                 logger.info("ChatService | Transcribing audio...")
-                transcript = self._transcribe(audio_file)
-                logger.info(f"transcript | {transcript} ...")
-                
-                if question:
-                    question = f"{question} {transcript}"
-                else:
-                    question = transcript
-            else :
-                logger.info(f"Aduio File is None")
-                #Validation
-                if not ingredient:
-                    raise ValueError("Ingredient is required")
+            transcript = self._transcribe(audio_file)
 
-                if not question or not question.strip():
-                    raise ValueError("Question is empty")
+            if not transcript:
+                raise ValueError("Transcription returned empty text")
+            question = f"{question} {transcript}".strip() if question else transcript
 
-            #Build prompt
-            prompt = self._build_prompt(ingredient, question)
-            
-            answer = ''
-            # Call AI
-            for _ in range(3):
+            # ── Validation (Aligned with API) ────
+            if not question and not ingredients:
+                raise ValueError("Either question or ingredients must be provided")
+
+            # ── Build Prompt ─────────────────────
+            prompt = self._build_prompt(ingredients, question)
+
+            # ── Retry AI Call ────────────────────
+            answer = ""
+            last_exception = None
+
+            for attempt in range(3):
                 try:
                     answer = self._call_ai(prompt)
-                except:
-                    continue
-            
+                    if answer:
+                        break
+                except Exception as e:
+                    last_exception = e
+                    logger.warning(f"AI attempt {attempt+1} failed: {str(e)}")
+
+            if not answer:
+                raise RuntimeError("AI failed after retries") from last_exception
 
             logger.info("ChatService | Success")
             return answer
@@ -61,7 +67,6 @@ class ChatService(IChatService):
         except Exception as e:
             logger.error(f"ChatService | Error: {str(e)}", exc_info=True)
             raise
-
     # -------------------------
     # Private Methods
     # -------------------------
@@ -74,27 +79,30 @@ class ChatService(IChatService):
             logger.error("Transcription failed", exc_info=True)
             raise RuntimeError("Audio transcription failed")
 
-    def _build_prompt(self, ingredient: str, question: str) -> str:
+    def _build_prompt(self, ingredients: List[str], question: str) -> str:
+        ingredient_text = ", ".join(ingredients) if ingredients else "Not provided"
+
         return f"""
-                You are a professional medical assistant.
-                If User Question Is Not related By The Medicines or the drugs 
-                Response By I Not Allowd TO Answer.
-                
-                Active ingredient: {ingredient}
+            You are a professional medical assistant.
 
-                Answer in English.
-                Provide GENERAL medical info only (no diagnosis).
+            If the user question is NOT related to medicines or drugs,
+            respond with: "I am not allowed to answer this."
 
-                Include:
-                - Uses
-                - Side effects
-                - Contraindications
-                - Warnings
-                - Drug interactions (if relevant)
-                - What conditions it treats
-                
-                User Question Is : {question}
-                """
+            Active ingredients: {ingredient_text}
+
+            Answer in English.
+            Provide GENERAL medical info only (no diagnosis).
+
+            Include:
+            - Uses
+            - Side effects
+            - Contraindications
+            - Warnings
+            - Drug interactions (if relevant)
+            - What conditions it treats
+
+            User Question: {question if question else "Not provided"}
+            """
 
     def _call_ai(self, prompt: str) -> str:
         try:
@@ -108,7 +116,11 @@ class ChatService(IChatService):
                 temperature=0.4
             )
 
-            return response.choices[0].message.content.strip()
+            content = response.choices[0].message.content
+            if not content:
+                raise RuntimeError("Empty response from AI")
+
+            return content.strip()
 
         except Exception as e:
             logger.error("AI request failed", exc_info=True)
