@@ -5,7 +5,9 @@ from App.repositories.vector.repository_factory import get_repo
 from App.ML.preprocessing.text_cleaner import Cleaner
 from App.ML.preprocessing.language_detector import LanguageDetector
 from App.observability.logger import get_logger
+from App.services.SemanticSearchService.ISemanticSearchService import ISemanticSearchService
 from App.services.VoiceSearch.IVoiceSearchService import IVoiceSearchService
+from App.services.service_providers import get_semantic_search_service
 
 logger = get_logger(__name__)
 
@@ -34,7 +36,7 @@ class VoiceSearchService(IVoiceSearchService):
             return []
 
         try:
-            # 1️⃣ Speech → Text
+            # Speech → Text
             text = self.transcription_service.transcribe(audio_file)
 
             if not text:
@@ -43,32 +45,14 @@ class VoiceSearchService(IVoiceSearchService):
 
             logger.info(f"Transcribed text: {text[:100]}...")
 
-            # 2️⃣ Clean
-            cleaned_query = self.cleaner.clean_text(text)
+            # Search
+            service: ISemanticSearchService = get_semantic_search_service()
 
-            # 3️⃣ Detect language
-            detected_lang = self.lang_detector.detect_language(cleaned_query)
-            logger.info(f"Voice query detected language: {detected_lang}")
-
-            # 4️⃣ Embed
-            query_vector = self.embedding_service.embed_texts(cleaned_query)
-
-            if query_vector is None or len(query_vector) == 0:
-                logger.error("Failed to generate embedding")
-                return []
-
-            # normalize vector shape
-            if isinstance(query_vector, list):
-                vector = query_vector[0]
-            else:
-                vector = query_vector[0].tolist()
-
-            # 5️⃣ Search
-            results = self.vector_repo.search(
-                query_vector=vector,
-                top_k=top_k,
-                with_vectors=with_vectors
-            )
+            results = service.search(
+                        query=text,
+                        top_k=top_k,
+                        with_vectors=with_vectors,
+                    )
 
             logger.info(f"Voice search returned {len(results)} results")
 
