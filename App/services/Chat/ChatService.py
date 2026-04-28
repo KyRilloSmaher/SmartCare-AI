@@ -28,7 +28,7 @@ class ChatService(IChatService):
 
             ingredients = ingredients or []
             question = (question or "").strip()
-
+            transcript = None
             # ── Handle Audio ─────────────────────
             if audio_file:
                 logger.info("ChatService | Transcribing audio...")
