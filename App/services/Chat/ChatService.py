@@ -32,10 +32,10 @@ class ChatService(IChatService):
             # ── Handle Audio ─────────────────────
             if audio_file:
                 logger.info("ChatService | Transcribing audio...")
-            transcript = self._transcribe(audio_file)
+                transcript = self._transcribe(audio_file)
 
-            if not transcript:
-                raise ValueError("Transcription returned empty text")
+                if not transcript:
+                    raise ValueError("Transcription returned empty text")
             question = f"{question} {transcript}".strip() if question else transcript
 
             # ── Validation (Aligned with API) ────
