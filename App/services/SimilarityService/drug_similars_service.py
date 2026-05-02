@@ -3,7 +3,6 @@ from typing import List, Dict, Any, Optional
 from App.services.SimilarityService.ISimilarityService import ISimilarityService 
 from App.repositories.vector.repository_factory import get_repo
 from App.observability.logger import get_logger
-import numpy as np
 
 logger = get_logger(__name__)
 

@@ -94,6 +94,9 @@ def semantic_search():
             with_vectors=req.with_vectors,
         )
 
+        if isinstance(raw, dict) and not raw.get("success", True):
+            return jsonify(raw), 400
+
         items = []
         for r in raw:
             items.append(SemanticSearchResultItem(

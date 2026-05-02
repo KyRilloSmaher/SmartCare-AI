@@ -46,7 +46,7 @@ class TestSemanticSearchService:
         service = SemanticSearchService()
         results = service.search("how to bake a cake")
         
-        assert len(results) == 1
-        assert "error" in results[0]
-        assert "Medical Purpose" in results[0]["error"]
+        assert isinstance(results, dict)
+        assert results["success"] is False
+        assert "Medical Purpose" in results["error"]
         self.mock_repo_instance.search.assert_not_called()

@@ -4,7 +4,9 @@ from App.repositories.vector.repository_factory import get_repo
 from App.ML.preprocessing.text_cleaner import Cleaner
 from App.ML.preprocessing.language_detector import LanguageDetector
 from App.observability.logger import get_logger
-from App.services.SemanticSearchService.ISemanticSearchService import ISemanticSearchService
+from App.services.SemanticSearchService.ISemanticSearchService import (
+    ISemanticSearchService,
+)
 
 logger = get_logger(__name__)
 
@@ -15,36 +17,36 @@ class SemanticSearchService(ISemanticSearchService):
         self.vector_repo = get_repo()
         self.cleaner = Cleaner()
         self.lang_detector = LanguageDetector()
-        self.medical_reference = (
-            "medications drugs treatment diseases symptoms diagnosis pharmacy medicine dosage side effects"
-        )
+        self.medical_reference = "medical drugs medicine disease treatment dosage prescription pharmacy diagnosis symptoms side effects antibiotics painkiller"
 
-        
         ref_embedding = self.embedding_service.embed_texts(self.medical_reference)
 
         if ref_embedding is None or len(ref_embedding) == 0:
             logger.error("Failed to initialize medical reference embedding")
             self.ref_vector = None
         else:
-            self.ref_vector = ref_embedding[0] if isinstance(ref_embedding, list) else ref_embedding[0].tolist()
+            self.ref_vector = (
+                ref_embedding[0]
+                if isinstance(ref_embedding, list)
+                else ref_embedding[0].tolist()
+            )
 
         logger.info("SemanticSearchService initialized")
 
     def is_medical_query(self, query_vector) -> bool:
         if self.ref_vector is None:
-            return True 
+            return True
 
-        similarity = self._similarity(query_vector,self.ref_vector)
+        similarity = self._similarity(query_vector, self.ref_vector)
 
         logger.info(f"Medical similarity score: {similarity}")
-        return similarity >= 0.60
+        return similarity >= 0.8
+
     def _similarity(self, v1, v2):
         return self.vector_repo.similarity(v1, v2)
+
     def search(
-        self,
-        query: str,
-        top_k: int = 10,
-        with_vectors: bool = False
+        self, query: str, top_k: int = 10, with_vectors: bool = False
     ) -> List[Dict[str, Any]]:
 
         if not query:
@@ -74,16 +76,14 @@ class SemanticSearchService(ISemanticSearchService):
         # Semantic validation (NEW)
         if not self.is_medical_query(query_vector):
             logger.warning("Rejected non-medical query")
-            return [{
-                "error": "❌ Search is only Allowed Fro Medical Purpose"
-            }]
+            return {
+                "success": False,
+                "error": "❌ Search is only Allowed Fro Medical Purpose",
+            }
 
-        #Search in vector DB
+        # Search in vector DB
         results = self.vector_repo.search(
-            query_vector=query_vector,
-            top_k=top_k,
-            with_vectors=with_vectors
+            query_vector=query_vector, top_k=top_k, with_vectors=with_vectors
         )
-
 
         return results
