@@ -40,7 +40,7 @@ class SemanticSearchService(ISemanticSearchService):
         similarity = self._similarity(query_vector, self.ref_vector)
 
         logger.info(f"Medical similarity score: {similarity}")
-        return similarity >= 0.70
+        return similarity >= 0.75
 
     def _similarity(self, v1, v2):
         return self.vector_repo.similarity(v1, v2)
