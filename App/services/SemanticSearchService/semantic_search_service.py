@@ -17,7 +17,7 @@ class SemanticSearchService(ISemanticSearchService):
         self.vector_repo = get_repo()
         self.cleaner = Cleaner()
         self.lang_detector = LanguageDetector()
-        self.medical_reference = "medical drugs medicine disease treatment dosage prescription pharmacy diagnosis symptoms side effects antibiotics painkiller"
+        self.medical_reference = "medical drugs medicine disease treatment dosage prescription pharmacy diagnosis symptoms side effects antibiotics painkiller pain aids "
 
         ref_embedding = self.embedding_service.embed_texts(self.medical_reference)
 
@@ -40,7 +40,7 @@ class SemanticSearchService(ISemanticSearchService):
         similarity = self._similarity(query_vector, self.ref_vector)
 
         logger.info(f"Medical similarity score: {similarity}")
-        return similarity >= 0.8
+        return similarity >= 0.70
 
     def _similarity(self, v1, v2):
         return self.vector_repo.similarity(v1, v2)
