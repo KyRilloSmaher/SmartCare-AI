@@ -34,7 +34,7 @@ class SemanticSearchService(ISemanticSearchService):
         Uses trained ML model instead of cosine similarity heuristic
         """
         try:
-            vec = self.embedding_service.embed_texts(query)
+            vec = self.embedding_service.embed_text(query,'query')
 
             if vec is None or len(vec) == 0:
                 return False
@@ -91,7 +91,7 @@ class SemanticSearchService(ISemanticSearchService):
             }
 
         #Embed query (ONLY after validation)
-        query_embedding = self.embedding_service.embed_texts(cleaned_query,'query')
+        query_embedding = self.embedding_service.embed_text(cleaned_query,'query')
 
         if query_embedding is None or len(query_embedding) == 0:
             logger.error("Failed to generate embedding")
