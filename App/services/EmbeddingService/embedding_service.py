@@ -11,6 +11,6 @@ class EmbeddingService:
         logger.debug(f"Embedding {len(texts)} texts")
         return self.model.embed(texts)
 
-    def embed_text(self, text: str) -> List[float]:
+    def embed_text(self, text: str , prefix: str = 'query') -> List[float]:
         list =[text]
-        return self.model.embed(list)
+        return self.model.embed(list , prefix)

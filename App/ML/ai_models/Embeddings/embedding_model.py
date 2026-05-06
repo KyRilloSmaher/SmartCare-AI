@@ -33,7 +33,7 @@ class HuggingFaceEmbeddingService(BaseEmbeddingModel):
         self.model = AutoModel.from_pretrained(self.model_name).to(self.device)
         self.model.eval()
 
-        # 🔥 Dynamic dimension (NO HARDCODE)
+        # Dynamic dimension (NO HARDCODE)
         self._dim = self.model.config.hidden_size
 
         logger.info(
