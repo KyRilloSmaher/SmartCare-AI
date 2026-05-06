@@ -81,6 +81,7 @@ regex==2026.1.15
 requests==2.31.0
 safetensors==0.7.0
 scipy==1.17.0
+scikit-learn==1.4.2
 sentence-transformers==5.2.0
 setuptools==82.0.0
 six==1.17.0
